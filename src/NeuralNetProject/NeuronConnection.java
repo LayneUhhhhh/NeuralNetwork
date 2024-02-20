@@ -7,6 +7,23 @@ public class NeuronConnection {
     private boolean Active;
     private double OutputSignalWhileActive; //between -1.0 and 1.0
 
+    public NeuronConnection(Nueron startNeuron, Nueron endNeuron, double outputSignalWhenActive){
+        this.startNeuron = startNeuron;
+        this.endNeuron = endNeuron;
+        Active = false;
+        OutputSignalWhileActive = OutputSignalWhileActive;
+        this.startNeuron.addNueronConnection(this);
+    }
+
+    public NeuronConnection(Nueron startNeuron, Nueron endNeuron){
+        this.startNeuron = startNeuron;
+        this.endNeuron = endNeuron;
+        Active = false;
+        int randomInt = 0;
+        this.OutputSignalWhileActive = randomInt;
+        this.startNeuron.addNueronConnection(this);
+    }
+
     public boolean getActiveStatus() {
         checkIfStartNueronIsActive();
         return this.Active;

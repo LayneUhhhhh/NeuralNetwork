@@ -5,9 +5,16 @@ import java.util.List;
 public class NueralNet {
 
     private List<Nueron> NueronList = new ArrayList<>();
+    private List<NeuronConnection> NueronConnectionList = new ArrayList<>();
 
     public NueralNet(NueralNet net) {
         this.NueronList = net.NueronList;
+        this.NueronConnectionList = net.NueronConnectionList;
+    }
+
+    public NueralNet(List<Nueron> Neurons, List<NeuronConnection> NeuronsConnections){
+        this.NueronList = Neurons;
+        this.NueronConnectionList = NeuronsConnections;
     }
 
     public NueralNet() {
@@ -46,8 +53,7 @@ public class NueralNet {
     }
 
     public void evolveNewRandomNueron(){
-        NueronList.add(new Nueron())
-
+        NueronList.add(new Nueron());
     }
 
 

@@ -1,7 +1,5 @@
 package CustomGame;
-import NeuralNetProject.InputNueron;
-import NeuralNetProject.NueralNet;
-import NeuralNetProject.Nueron;
+import NeuralNetProject.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +23,12 @@ public class Creature {
         Brain = brain;
     }
 
+    public Creature(int x, int y) {
+        this.x = x;
+        this.y = y;
+        Brain = NeuronTestingInterface.generateCreatureRandomStartingNet();
+    }
+
     
 
     public void Tick(TileMap t){
@@ -32,13 +36,13 @@ public class Creature {
         ineurons.get(0).setNextExcitementLevel(this.x * 0.01);
         ineurons.get(1).setNextExcitementLevel(this.y * 0.01);
         Brain.TickUpdateAllNeurons();
-        List<OutputNueron> oneurons = Brain.getOutputNeuronList();
+        List<OutputNeuron> oneurons = Brain.getOutputNeuronList();
 
-        int tempHighestDirection;
+        int tempHighestDirection = 1;
         double tempHighestOutputLevel = 0.0;
 
         for(int i = 0; i < 4; i++){
-            if (oneurons.get(i).getExcitementLevel() > tempHighestOutputLevel){
+            if (oneurons.get(i).getExcitement() > tempHighestOutputLevel){
                 tempHighestDirection = i + 1;
             }
         }
@@ -52,7 +56,7 @@ public class Creature {
         if (this.x < 100){
             t.getTilesOnMapList().get((this.x * 100) + this.y).containsCreature = false;
 
-            switch(tempHighestDirection){
+            switch(moveValue){
                 case MoveRightValue: this.x++; break;
                 case MoveLeftValue: this.x--; break;
                 case MoveDownValue: this.y++; break;

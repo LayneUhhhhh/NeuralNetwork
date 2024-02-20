@@ -7,6 +7,10 @@ public class InputNueron extends Nueron {
         this.nextExcitementLevel = nextExcitementLevel;
     }
 
+    public InputNueron(){
+        this.nextExcitementLevel = 0;
+    }
+
     @Override
     public void updateExcitement(){
         CurrentExcitementLevel = nextExcitementLevel;
