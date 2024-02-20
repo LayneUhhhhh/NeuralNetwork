@@ -6,6 +6,10 @@ public class NueralNet {
 
     private List<Nueron> NueronList = new ArrayList<>();
 
+    public NueralNet(NueralNet net) {
+        this.NueronList = net.NueronList;
+    }
+
     public NueralNet() {
     }
 
@@ -40,5 +44,11 @@ public class NueralNet {
         }
         return templist;
     }
+
+    public void evolveNewRandomNueron(){
+        NueronList.add(new Nueron())
+
+    }
+
 
 }

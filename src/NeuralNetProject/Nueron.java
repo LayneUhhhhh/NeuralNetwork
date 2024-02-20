@@ -11,6 +11,13 @@ public class Nueron {
     protected double CurrentExcitementLevel;
     protected List<NeuronConnection> InputConnections = new ArrayList<>();
 
+    public Nueron(){
+    }
+
+    public Nueron(List<NeuronConnection> inputConnections){
+        this.InputConnections = inputConnections;
+    }
+
     public double getExcitement(){
         return CurrentExcitementLevel;
     }
