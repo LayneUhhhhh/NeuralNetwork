@@ -8,7 +8,11 @@ import java.util.List;
 
 public class DrawingWindow extends JFrame {
 
+    private TileMap T;
+    private Graphics g;
+
     public DrawingWindow(TileMap t) {
+        this.t = t;
         setTitle("Drawing Window");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1000, 1000);
@@ -19,14 +23,15 @@ public class DrawingWindow extends JFrame {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                draw(g, t);
+                draw(g);
+                this.g = g;
             }
         };
         getContentPane().add(panel);
     }
 
     // Method to perform drawing
-    private void draw(Graphics g, TileMap T) {
+    public void draw() {
         List<Tile> tList = T.getTilesOnMapList();
         for(Tile t: tList){
             if(t.containsCreature == false)

@@ -56,5 +56,12 @@ public class NueralNet {
         NueronList.add(new Nueron());
     }
 
+    public List<Nueron> getNeuronList(){
+        return this.NueronList;
+    }
+
+    public void addNewNeuralConnection(NeuronConnection nc){
+        this.NueronConnectionList.add(nc);
+    }
 
 }

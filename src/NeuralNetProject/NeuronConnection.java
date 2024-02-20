@@ -11,7 +11,7 @@ public class NeuronConnection {
         this.startNeuron = startNeuron;
         this.endNeuron = endNeuron;
         Active = false;
-        OutputSignalWhileActive = OutputSignalWhileActive;
+        this.OutputSignalWhileActive = outputSignalWhenActive;
         this.startNeuron.addNueronConnection(this);
     }
 
@@ -19,6 +19,7 @@ public class NeuronConnection {
         this.startNeuron = startNeuron;
         this.endNeuron = endNeuron;
         Active = false;
+        Random rand = new Random();
         int randomInt = 0;
         this.OutputSignalWhileActive = randomInt;
         this.startNeuron.addNueronConnection(this);
