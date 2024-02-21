@@ -1,5 +1,7 @@
 package NeuralNetProject;
 
+import java.util.Random;
+
 public class NeuronConnection {
 
     private Nueron startNeuron;
@@ -20,9 +22,16 @@ public class NeuronConnection {
         this.endNeuron = endNeuron;
         Active = false;
         Random rand = new Random();
-        int randomInt = 0;
-        this.OutputSignalWhileActive = randomInt;
+        double randomValue = rand.nextDouble() * 2000 - 1000;
+        randomValue /= 1000;
+        randomValue = Math.round(randomValue * 1000.0) / 1000.0;
+        this.OutputSignalWhileActive = randomValue + 0.7;
+        System.out.print("connectionval: " + randomValue + "\n");
         this.startNeuron.addNueronConnection(this);
+    }
+
+    public NeuronConnection(NeuronConnection n){
+
     }
 
     public boolean getActiveStatus() {
@@ -39,7 +48,7 @@ public class NeuronConnection {
     }
 
     private void checkIfStartNueronIsActive() {
-        if (endNeuron.getExcitement() >= Nueron.ExcitementThreshold)
+        if (startNeuron.getExcitement() >= Nueron.ExcitementThreshold)
             this.Active = true;
         else
             this.Active = false;

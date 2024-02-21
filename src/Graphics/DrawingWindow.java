@@ -9,10 +9,10 @@ import java.util.List;
 public class DrawingWindow extends JFrame {
 
     private TileMap T;
-    private Graphics g;
+    public static Graphics g;
 
     public DrawingWindow(TileMap t) {
-        this.t = t;
+        this.T = t;
         setTitle("Drawing Window");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1000, 1000);
@@ -24,22 +24,22 @@ public class DrawingWindow extends JFrame {
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 draw(g);
-                this.g = g;
+
             }
         };
         getContentPane().add(panel);
     }
 
     // Method to perform drawing
-    public void draw() {
+    public void draw(Graphics g) {
         List<Tile> tList = T.getTilesOnMapList();
         for(Tile t: tList){
-            if(t.containsCreature == false)
+            if(t.contents != null)
                 g.setColor(Color.RED);
             else
                 g.setColor(Color.BLACK);
             g.fillRect(t.x * 10, t.y * 10, 9, 9);
-            System.out.print(t.x + ":" + t.y + "\n");
+            //System.out.print(t.x + ":" + t.y + "\n");
         }
 
 

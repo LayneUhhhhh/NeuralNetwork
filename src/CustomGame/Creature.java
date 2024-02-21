@@ -3,6 +3,10 @@ import NeuralNetProject.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+
+import static java.lang.Integer.valueOf;
+
 
 public class Creature {
 
@@ -26,22 +30,22 @@ public class Creature {
     public Creature(int x, int y) {
         this.x = x;
         this.y = y;
-        Brain = NeuronTestingInterface.generateCreatureRandomStartingNet();
+        Brain = NeuronTestingInterface.generateCreatureRandomStartingNet(40, 400);
     }
 
     public Creature(Creature c){
 
-        this.x = new Int(c.x);
-        this.y = new Int(c.y);
+        this.x = valueOf(c.x);
+        this.y = valueOf(c.y);
         this.Brain = new NueralNet(c.Brain);
 
     }
 
-    public Creature evolveNewCreatureWithNewConnections(Creature c){
+    public Creature evolveNewCreatureWithNewConnections(){
         
-        tempBrain = new NueralNet(Brain);
+        NueralNet tempBrain = new NueralNet(Brain);
         Random rand = new Random();
-        int tempInt = rand.randInt(2) + 1;
+        int tempInt = rand.nextInt(2) + 1;
         for(int i = 0; i < tempInt; i++){
             NeuronTestingInterface.evolveNewConnection(tempBrain);
         }
@@ -49,10 +53,11 @@ public class Creature {
 
     }
 
-    public Creature evolveNewCreatureWithNewNeuron(Creature c){
+    public Creature evolveNewCreatureWithNewNeuron(){
 
-        tempBrain = new NueralNet(Brain);
-        NeuronTestingInterface.evolveNewNeuronWithConnections(tempBrain);
+        Random rand = new Random();
+        NueralNet tempBrain = new NueralNet(Brain);
+        NeuronTestingInterface.evolveNewNeuronWithConnections(tempBrain, rand.nextInt(2), rand.nextInt(2));
         return new Creature(this.x, this.y, tempBrain);
         
     }
@@ -61,6 +66,7 @@ public class Creature {
         List<InputNueron> ineurons = Brain.getInputNeuronList();
         ineurons.get(0).setNextExcitementLevel(this.x * 0.01);
         ineurons.get(1).setNextExcitementLevel(this.y * 0.01);
+        ineurons.get(2).setNextExcitementLevel(0.0);
         Brain.TickUpdateAllNeurons();
         List<OutputNeuron> oneurons = Brain.getOutputNeuronList();
 
@@ -70,40 +76,66 @@ public class Creature {
         for(int i = 0; i < 4; i++){
             if (oneurons.get(i).getExcitement() > tempHighestOutputLevel){
                 tempHighestDirection = i + 1;
+                tempHighestOutputLevel = oneurons.get(i).getExcitement();
             }
         }
 
+        System.out.print("highestOut: " + tempHighestOutputLevel + " direction: " + tempHighestDirection + "\n");
+
         if(!(tempHighestOutputLevel < Nueron.ExcitementThreshold))
-            this.move(t, tempHighestDirection);
+            if (!this.move(t, tempHighestDirection));
+                ineurons.get(2).setNextExcitementLevel(1.0);
           
     }
 
     public boolean move(TileMap t, int moveValue){
 
-        boolean cantMove = false;
+        System.out.print("Move!\n");
+
+        boolean canMove = true;
 
         if (this.x < 100){
             
-            startTile = t.getTilesOnMapList().get((this.x * 100) + this.y);
+            Tile startTile = t.getTilesOnMapList().get((this.x * 100) + this.y);
 
             switch(moveValue){
-                case MoveRightValue: if(x != 100){this.x++;}else{cantMove = true;} break;
-                case MoveLeftValue: if(x != 1){this.x--;}else{cantMove = true;} break;
-                case MoveDownValue: if(this.y != 100){this.y++;}else{cantMove = true;} break;
-                case MoveUpValue: if(this.y != 1){this.y--;}else{cantMove = true;} break;
+                case MoveRightValue: if(x != 99){this.x++;}else{canMove = false;} break;
+                case MoveLeftValue: if(x != 0){this.x--;}else{canMove = false;} break;
+                case MoveDownValue: if(this.y != 99){this.y++;}else{canMove = false;} break;
+                case MoveUpValue: if(this.y != 0){this.y--;}else{canMove = false;} break;
             }
 
-            endTile = t.getTilesOnMapList().get((this.x * 100) + this.y);
+            Tile endTile = t.getTilesOnMapList().get((this.x * 100) + this.y);
 
-            if(endTile.contents != null)
-                
+            if(endTile.contents != null){
+                canMove = false;
+                this.x = startTile.x;
+                this.y = startTile.y;
+            }
+            else{
+                startTile.contents = null;
+                endTile.contents = this;
+            }
+        }
+        return canMove;
+    }
+
+    public boolean UpdatePos(TileMap t, int x, int y){
+
+        Tile endTile = t.getTilesOnMapList().get((this.x * 100) + this.y);
+        Tile startTile = t.getTilesOnMapList().get((x * 100) + y);
+        if(endTile.contents != null){
+            return false;
+        }
+        else {
+            startTile.contents = null;
+            endTile.contents = this;
+            return true;
         }
     }
 
-    public UpdatePos(int x, int y){
-        t.getTilesOnMapList().get((this.x * 100) + this.y).contents = null;
-        
-        t.getTilesOnMapList().get((this.x * 100) + this.y).contents = this;
-    }
+    public void addCreatureToTile(TileMap t){
 
+
+    }
 }

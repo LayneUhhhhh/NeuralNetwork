@@ -14,6 +14,10 @@ public class Nueron {
     public Nueron(){
     }
 
+    public Nueron(Nueron n){
+        this.InputConnections = n.InputConnections;
+    }
+
     public Nueron(List<NeuronConnection> inputConnections){
         this.InputConnections = inputConnections;
     }
@@ -23,7 +27,9 @@ public class Nueron {
     }
 
     public void updateExcitement(){
+        CurrentExcitementLevel = 0;
         for (NeuronConnection N: InputConnections){
+            //System.out.print("updated, added: " + N.getCurrentConnectionOutputSignal() + " total: " + CurrentExcitementLevel + N.getCurrentConnectionOutputSignal() + "\n");
             CurrentExcitementLevel += N.getCurrentConnectionOutputSignal();
         }
     }

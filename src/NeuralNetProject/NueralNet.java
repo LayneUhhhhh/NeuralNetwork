@@ -8,8 +8,13 @@ public class NueralNet {
     private List<NeuronConnection> NueronConnectionList = new ArrayList<>();
 
     public NueralNet(NueralNet net) {
-        this.NueronList = new List<Nueron>(net.NueronList);
-        this.NueronConnectionList = new List<NeuronConnection>(net.NueronConnectionList);
+        for(Nueron n: net.NueronList){
+            this.NueronList.add(new Nueron(n));
+        }
+        for(NeuronConnection n: net.NueronConnectionList){
+            this.NueronConnectionList.add(new NeuronConnection(n));
+        }
+        this.NueronConnectionList = new ArrayList<>(net.NueronConnectionList);
     }
 
     public NueralNet(List<Nueron> Neurons, List<NeuronConnection> NeuronsConnections){
@@ -27,6 +32,16 @@ public class NueralNet {
     public void TickUpdateAllNeurons(){
         for(Nueron N: NueronList){
             N.updateExcitement();
+            /*
+            if (N.getClass() == OutputNeuron.class)
+                System.out.print("O: " + N.getExcitement());
+            else if (N.getClass() == InputNueron.class)
+                System.out.print("I: " + N.getExcitement());
+            else
+                System.out.print("N: " + N.getExcitement());
+            System.out.print("\n");
+
+             */
         }
     }
 
