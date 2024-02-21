@@ -8,8 +8,8 @@ public class NueralNet {
     private List<NeuronConnection> NueronConnectionList = new ArrayList<>();
 
     public NueralNet(NueralNet net) {
-        this.NueronList = net.NueronList;
-        this.NueronConnectionList = net.NueronConnectionList;
+        this.NueronList = new List<Nueron>(net.NueronList);
+        this.NueronConnectionList = new List<NeuronConnection>(net.NueronConnectionList);
     }
 
     public NueralNet(List<Nueron> Neurons, List<NeuronConnection> NeuronsConnections){

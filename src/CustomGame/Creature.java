@@ -29,7 +29,33 @@ public class Creature {
         Brain = NeuronTestingInterface.generateCreatureRandomStartingNet();
     }
 
-    
+    public Creature(Creature c){
+
+        this.x = new Int(c.x);
+        this.y = new Int(c.y);
+        this.Brain = new NueralNet(c.Brain);
+
+    }
+
+    public Creature evolveNewCreatureWithNewConnections(Creature c){
+        
+        tempBrain = new NueralNet(Brain);
+        Random rand = new Random();
+        int tempInt = rand.randInt(2) + 1;
+        for(int i = 0; i < tempInt; i++){
+            NeuronTestingInterface.evolveNewConnection(tempBrain);
+        }
+        return new Creature(this.x, this.y, tempBrain);
+
+    }
+
+    public Creature evolveNewCreatureWithNewNeuron(Creature c){
+
+        tempBrain = new NueralNet(Brain);
+        NeuronTestingInterface.evolveNewNeuronWithConnections(tempBrain);
+        return new Creature(this.x, this.y, tempBrain);
+        
+    }
 
     public void Tick(TileMap t){
         List<InputNueron> ineurons = Brain.getInputNeuronList();
@@ -52,19 +78,32 @@ public class Creature {
           
     }
 
-    public void move(TileMap t, int moveValue){
+    public boolean move(TileMap t, int moveValue){
+
+        boolean cantMove = false;
+
         if (this.x < 100){
-            t.getTilesOnMapList().get((this.x * 100) + this.y).containsCreature = false;
+            
+            startTile = t.getTilesOnMapList().get((this.x * 100) + this.y);
 
             switch(moveValue){
-                case MoveRightValue: this.x++; break;
-                case MoveLeftValue: this.x--; break;
-                case MoveDownValue: this.y++; break;
-                case MoveUpValue: this.y--; break;
+                case MoveRightValue: if(x != 100){this.x++;}else{cantMove = true;} break;
+                case MoveLeftValue: if(x != 1){this.x--;}else{cantMove = true;} break;
+                case MoveDownValue: if(this.y != 100){this.y++;}else{cantMove = true;} break;
+                case MoveUpValue: if(this.y != 1){this.y--;}else{cantMove = true;} break;
             }
 
-            t.getTilesOnMapList().get((this.x * 100) + this.y).containsCreature = true;
+            endTile = t.getTilesOnMapList().get((this.x * 100) + this.y);
+
+            if(endTile.contents != null)
+                
         }
+    }
+
+    public UpdatePos(int x, int y){
+        t.getTilesOnMapList().get((this.x * 100) + this.y).contents = null;
+        
+        t.getTilesOnMapList().get((this.x * 100) + this.y).contents = this;
     }
 
 }
