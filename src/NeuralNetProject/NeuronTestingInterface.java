@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface NeuronTestingInterface {
 
+    public static final int CONNECTIONS_PER_NEURON = 8;
 
     public static NueralNet generateCreatureRandomStartingNet(int neuronRangeMin, int neuronRangeMax){
         List<Nueron> tempNeuronList = new ArrayList<>();
@@ -44,13 +45,12 @@ public interface NeuronTestingInterface {
         int randomIntEndConnectionNeuron = 0;
         int randomIntStartConnectionNeuron = 0;
 
-        randomInt = randomInt * 8;
+        randomInt = randomInt * CONNECTIONS_PER_NEURON;
         for(int i = 0; i < randomInt; i++){
             randomIntEndConnectionNeuron = rand.nextInt(possibleEndConnection.size());
             randomIntStartConnectionNeuron = rand.nextInt(possibleStartConnection.size());
             System.out.print("here\n");
             NeuronConnection n = new NeuronConnection(possibleStartConnection.get(randomIntStartConnectionNeuron), possibleEndConnection.get(randomIntEndConnectionNeuron));
-            possibleEndConnection.get(randomIntEndConnectionNeuron).InputConnections.add(n);
             tempConnectionList.add(n);
         }
 
@@ -81,13 +81,48 @@ public interface NeuronTestingInterface {
 
     }
 
-    public static Nueron evolveNewNeuron(NueralNet net){
+    static Nueron evolveNewNeuron(NueralNet net){
         Nueron n = new Nueron();
-        net.addNueron(n);
+        net.addNeuron(n);
         return n;
     }
 
-    public static void evolveNewNeuronWithConnections(NueralNet net, int amountOfStartConnections, int amountOfEndConnections){
+    static void RemoveConnections(NueralNet net, int amount){
+        List<NeuronConnection> connectionList = net.GetConnectionList();
+        Random rand = new Random();
+        for(int i = 0; i < amount; i++) {
+            int deleteNum = rand.nextInt(connectionList.size());
+            connectionList.remove(deleteNum);
+        }
+    }
+
+    static void RemoveNeuron(NueralNet net){
+        List<Nueron> nList = net.getNeuronList();
+        List<Nueron> tempList = new ArrayList<>();
+        for(Nueron N: nList){
+            if(N.getClass() != InputNueron.class && N.getClass() != OutputNeuron.class){
+                tempList.add(N);
+            }
+        }
+        Random rand = new Random();
+        int getNum = rand.nextInt(tempList.size());
+        Nueron N = tempList.get(getNum);
+        nList.remove(N);
+        System.out.println(N.getClass());
+        List<NeuronConnection> connList = net.GetConnectionList();
+        for(NeuronConnection NC: connList){
+            if (NC.GetStartNeuron() == N || NC.GetEndNeuron() == N){
+                connList.remove(NC);
+            }
+        }
+
+    }
+
+    static void evolveNewNeuronWithConnections(NueralNet net, int amountOfStartConnections, int amountOfEndConnections){
+
+        if(net.getNeuronList().size() > 24){
+            return;
+        }
 
         Nueron N = evolveNewNeuron(net);
         Random rand = new Random();

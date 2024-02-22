@@ -33,11 +33,19 @@ public class DrawingWindow extends JFrame {
     // Method to perform drawing
     public void draw(Graphics g) {
         List<Tile> tList = T.getTilesOnMapList();
+        int i = 0;
         for(Tile t: tList){
-            if(t.contents != null)
+            if (i % 100 == 0)
+                System.out.print("\n");
+
+            if(t.contents != null) {
                 g.setColor(Color.RED);
-            else
+                System.out.print("O");
+            }
+            else{
                 g.setColor(Color.BLACK);
+                System.out.print("+");
+            }
             g.fillRect(t.x * 10, t.y * 10, 9, 9);
             //System.out.print(t.x + ":" + t.y + "\n");
         }

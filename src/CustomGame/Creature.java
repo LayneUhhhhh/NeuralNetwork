@@ -30,18 +30,35 @@ public class Creature {
     public Creature(int x, int y) {
         this.x = x;
         this.y = y;
-        Brain = NeuronTestingInterface.generateCreatureRandomStartingNet(40, 400);
+        Brain = NeuronTestingInterface.generateCreatureRandomStartingNet(5, 10);
     }
 
-    public Creature(Creature c){
+    public Creature(Creature c, TileMap t){
 
-        this.x = valueOf(c.x);
-        this.y = valueOf(c.y);
+        Random rand = new Random();
+        int randx = rand.nextInt(100);
+        int randy = rand.nextInt(100);
+        Tile endTile = t.getTilesOnMapList().get((randx * 100) + randy);
+
+        while (true){
+            if(endTile.contents == null){
+                endTile.contents = this;
+                break;
+            }
+            else{
+                randy = rand.nextInt(100);
+                randx = rand.nextInt(100);
+                endTile = t.getTilesOnMapList().get((randx * 100) + randy);
+            }
+        }
+        this.x = randx;
+        this.y = randy;
         this.Brain = new NueralNet(c.Brain);
+        //System.out.print("endXY Con: " + this.x + "-" + this.y + "\n");
 
     }
 
-    public Creature evolveNewCreatureWithNewConnections(){
+    public Creature evolveNewCreatureWithNewConnections(TileMap t){
         
         NueralNet tempBrain = new NueralNet(Brain);
         Random rand = new Random();
@@ -49,16 +66,43 @@ public class Creature {
         for(int i = 0; i < tempInt; i++){
             NeuronTestingInterface.evolveNewConnection(tempBrain);
         }
-        return new Creature(this.x, this.y, tempBrain);
+        Creature c = new Creature(this.x, this.y, tempBrain);
+        return new Creature(c, t);
 
     }
 
-    public Creature evolveNewCreatureWithNewNeuron(){
+    public Creature evolveNewCreatureWithRemovedConnection(TileMap t){
+
+        NueralNet tempBrain = new NueralNet(Brain);
+        Random rand = new Random();
+        int tempInt = rand.nextInt(2) + 1;
+        for(int i = 0; i < tempInt; i++){
+            NeuronTestingInterface.RemoveConnections(tempBrain, rand.nextInt(2));
+        }
+        Creature c = new Creature(this.x, this.y, tempBrain);
+        return new Creature(c, t);
+
+    }
+    public Creature evolveNewCreatureWithRemovedNeuron(TileMap t){
+
+        NueralNet tempBrain = new NueralNet(Brain);
+        Random rand = new Random();
+        int tempInt = rand.nextInt(2) + 1;
+        for(int i = 0; i < tempInt; i++){
+            NeuronTestingInterface.RemoveNeuron(tempBrain);
+        }
+        Creature c = new Creature(this.x, this.y, tempBrain);
+        return new Creature(c, t);
+
+    }
+
+    public Creature evolveNewCreatureWithNewNeuron(TileMap t){
 
         Random rand = new Random();
         NueralNet tempBrain = new NueralNet(Brain);
         NeuronTestingInterface.evolveNewNeuronWithConnections(tempBrain, rand.nextInt(2), rand.nextInt(2));
-        return new Creature(this.x, this.y, tempBrain);
+        Creature c = new Creature(this.x, this.y, tempBrain);
+        return new Creature(c, t);
         
     }
 
@@ -80,7 +124,7 @@ public class Creature {
             }
         }
 
-        System.out.print("highestOut: " + tempHighestOutputLevel + " direction: " + tempHighestDirection + "\n");
+        //System.out.print("highestOut: " + tempHighestOutputLevel + " direction: " + tempHighestDirection + "\n");
 
         if(!(tempHighestOutputLevel < Nueron.ExcitementThreshold))
             if (!this.move(t, tempHighestDirection));
@@ -94,8 +138,8 @@ public class Creature {
 
         boolean canMove = true;
 
-        if (this.x < 100){
-            
+            int startX = valueOf(this.x);
+            int startY = valueOf(this.y);
             Tile startTile = t.getTilesOnMapList().get((this.x * 100) + this.y);
 
             switch(moveValue){
@@ -109,33 +153,45 @@ public class Creature {
 
             if(endTile.contents != null){
                 canMove = false;
-                this.x = startTile.x;
-                this.y = startTile.y;
+                this.x = startX;
+                this.y = startY;
             }
             else{
-                startTile.contents = null;
+                t.getTilesOnMapList().get((startX * 100) + startY).contents = null;
                 endTile.contents = this;
             }
-        }
+        //System.out.print("start tile: " + startTile.contents + " end tile: " + endTile.contents + " this: " + this + "\n");
+        //System.out.print("endXY Move: " + this.x + "-" + this.y + "\n");
         return canMove;
     }
 
     public boolean UpdatePos(TileMap t, int x, int y){
 
-        Tile endTile = t.getTilesOnMapList().get((this.x * 100) + this.y);
-        Tile startTile = t.getTilesOnMapList().get((x * 100) + y);
-        if(endTile.contents != null){
+        Tile startTile = t.getTilesOnMapList().get((this.x * 100) + this.y);
+        Tile endTile = t.getTilesOnMapList().get((x * 100) + y);
+        if(!(endTile.contents == null)){
+            //System.out.print("endXY UpdatePos: " + this.x + "-" + this.y + "\n");
             return false;
         }
         else {
             startTile.contents = null;
             endTile.contents = this;
+            this.x = x;
+            this.y = y;
+            //System.out.print("endXY UpdatePos: " + x + "-" + y + "\n");
             return true;
         }
     }
 
     public void addCreatureToTile(TileMap t){
 
+    }
 
+    public void RemoveFromMap(TileMap T){
+        for(Tile t: T.getTilesOnMapList()){
+            if(t.contents == this)
+                t.contents = null;
+
+        }
     }
 }

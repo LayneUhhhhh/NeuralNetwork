@@ -23,4 +23,13 @@ public class TileMap {
         return TilesOnMap;
     }
 
+    public int GetAmountOfTilesWithContents(){
+        int count = 0;
+        for(Tile t: this.TilesOnMap){
+            if(t.contents != null)
+                count++;
+        }
+        return count;
+    }
+
 }
