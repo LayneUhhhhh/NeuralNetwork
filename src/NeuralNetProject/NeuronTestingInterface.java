@@ -14,7 +14,8 @@ public interface NeuronTestingInterface {
         tempNeuronList.add(new InputNueron());
         tempNeuronList.add(new InputNueron());
         InputNueron alwaysActive = new InputNueron();
-        alwaysActive.setNextExcitementLevel(1);
+        alwaysActive.ConstantValue = true;
+        alwaysActive.setNextExcitementLevel(1.0);
         tempNeuronList.add(alwaysActive);
         tempNeuronList.add(new OutputNeuron());
         tempNeuronList.add(new OutputNeuron());
@@ -99,6 +100,11 @@ public interface NeuronTestingInterface {
     static void RemoveNeuron(NueralNet net){
         List<Nueron> nList = net.getNeuronList();
         List<Nueron> tempList = new ArrayList<>();
+
+        if(nList.size() < 11){
+            return;
+        }
+
         for(Nueron N: nList){
             if(N.getClass() != InputNueron.class && N.getClass() != OutputNeuron.class){
                 tempList.add(N);
@@ -110,9 +116,11 @@ public interface NeuronTestingInterface {
         nList.remove(N);
         System.out.println(N.getClass());
         List<NeuronConnection> connList = net.GetConnectionList();
-        for(NeuronConnection NC: connList){
+        List<NeuronConnection> tempConnList = new ArrayList<>(connList);
+        for(NeuronConnection NC: tempConnList){
             if (NC.GetStartNeuron() == N || NC.GetEndNeuron() == N){
                 connList.remove(NC);
+                break;
             }
         }
 

@@ -7,6 +7,8 @@ import Graphics.DrawingWindow;
 import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
@@ -45,7 +47,7 @@ public class Game {
                     c.Tick(gameMap);
                 }
 
-                if (round % 5000 == 0) {
+                if (round % 50000000 == 0) {
                     SwingUtilities.invokeLater(() -> {
                         DrawingWindow gameWindow = new DrawingWindow(this.gameMap);
                         gameWindow.setVisible(true);
@@ -105,32 +107,56 @@ public class Game {
         if(round % 50 == 0){
             int I = 0;
             List<Creature> tempList = new ArrayList<>();
+            List<Creature> tempList2 = new ArrayList<>();
+                
+            for(Creature c: this.gameCreatures){
+                System.out.println("X: " + c.x);
+                if (c.moves < 1)
+                    c.moves = c.moves - 1000;
+                if(c.x < 10){
+                    c.moves = c.moves + 100;
+                }
+            }
+            
+            Collections.sort(this.gameCreatures, new Comparator<Creature>() {
+            @Override
+            public int compare(Creature obj1, Creature obj2) {
+                return Integer.compare(obj1.moves, obj2.moves);
+            }
+        });
+
+
             for(Creature c: this.gameCreatures){
                 tempList.add(c);
             }
-            for(Creature c: tempList){
-                if(c.x > 50) {
-                    gameCreatures.remove(c);
-                    c.RemoveFromMap(this.gameMap);
-                    I++;
+            System.out.println("GC: " + gameCreatures.size());
+            System.out.println("TL: " + tempList.size());
+            for(int i = 0; i < 75; i++){
+                    Creature C = tempList.get(i);
+                    gameCreatures.remove(C);
+                    C.RemoveFromMap(this.gameMap);
                 }
-            }
             //CheckIfGameCreaturesHaveTheSameXY("1");
-            System.out.println("deaths: " + I);
             int tempSize = valueOf(gameCreatures.size());
-            for(int i = valueOf(tempSize); i < 100; i++){
+            int j = 24;
+            boolean already2nd = false;
+            for(int i = tempSize; i < 100; i++){
 
                 int evolution = rand.nextInt(300);
                 if(evolution == 1 || evolution == 2 || evolution == 3)
-                    gameCreatures.add(gameCreatures.get(rand.nextInt(tempSize)).evolveNewCreatureWithNewConnections(this.gameMap));
+                    gameCreatures.add(gameCreatures.get(j).evolveNewCreatureWithNewConnections(this.gameMap));
                 else if(evolution == 4)
-                    gameCreatures.add(gameCreatures.get(rand.nextInt(tempSize)).evolveNewCreatureWithNewNeuron(this.gameMap));
-                else if(evolution == 5 || evolution == 6 || evolution == 7 || evolution == 8 || evolution == 9 || evolution == 10)
-                    gameCreatures.add(gameCreatures.get(rand.nextInt(tempSize)).evolveNewCreatureWithRemovedNeuron(this.gameMap));
+                    gameCreatures.add(gameCreatures.get(j).evolveNewCreatureWithNewNeuron(this.gameMap));
+                else if(evolution == 5 || evolution == 6 || evolution == 7)
+                    gameCreatures.add(gameCreatures.get(j).evolveNewCreatureWithRemovedNeuron(this.gameMap));
                 else if(evolution == 11 || evolution == 12)
-                    gameCreatures.add(gameCreatures.get(rand.nextInt(tempSize)).evolveNewCreatureWithRemovedConnection(this.gameMap));
+                    gameCreatures.add(gameCreatures.get(j).evolveNewCreatureWithRemovedConnection(this.gameMap));
                 else 
-                    gameCreatures.add(new Creature(gameCreatures.get(rand.nextInt(tempSize)), this.gameMap));
+                    gameCreatures.add(new Creature(gameCreatures.get(j), this.gameMap));
+                
+                    j--;
+                if(j < 0)
+                    j = 24;
                 //System.out.print("i: " + i + "\n");
                 //System.out.print("contentsIN: " + gameMap.GetAmountOfTilesWithContents() + "\n");
             }
@@ -140,9 +166,10 @@ public class Game {
             int i = 0;
             for(Creature c: gameCreatures){
                 c.Brain.ResetNetActivity();
+                c.moves = 0;
                 boolean go = false;
                 while (!go){
-                    go = c.UpdatePos(this.gameMap, rand.nextInt(100), rand.nextInt(100));
+                    go = c.UpdatePos(this.gameMap, rand.nextInt(89) + 11, rand.nextInt(100));
                 }
                 i++;
             }

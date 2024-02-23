@@ -15,6 +15,7 @@ public class Creature {
     private static final int MoveDownValue = 3;
     private static final int MoveUpValue = 4;
 
+    public int moves;
     public int x;
     public int y;
     public NueralNet Brain;
@@ -25,12 +26,14 @@ public class Creature {
         this.x = x;
         this.y = y;
         Brain = brain;
+        this.moves = 0;
     }
 
     public Creature(int x, int y) {
         this.x = x;
         this.y = y;
         Brain = NeuronTestingInterface.generateCreatureRandomStartingNet(5, 10);
+        this.moves = 0;
     }
 
     public Creature(Creature c, TileMap t){
@@ -53,6 +56,7 @@ public class Creature {
         }
         this.x = randx;
         this.y = randy;
+        this.moves = 0;
         this.Brain = new NueralNet(c.Brain);
         //System.out.print("endXY Con: " + this.x + "-" + this.y + "\n");
 
@@ -162,6 +166,8 @@ public class Creature {
             }
         //System.out.print("start tile: " + startTile.contents + " end tile: " + endTile.contents + " this: " + this + "\n");
         //System.out.print("endXY Move: " + this.x + "-" + this.y + "\n");
+        if(canMove)
+            this.moves++;
         return canMove;
     }
 
