@@ -2,6 +2,7 @@ package NeuralNetProject;
 
 import java.util.ArrayList;
 import java.util.List;
+import CustomGame.Game;
 
 import static java.lang.Integer.valueOf;
 
@@ -31,7 +32,10 @@ public class NueralNet {
             NeuronConnection newNeuronConn = new NeuronConnection(n);
             this.NueronConnectionList.add(newNeuronConn);
             newNeuronConn.setNeuronsWithID(this.NueronList);
+            //System.out.println("RM endID: " + newNeuronConn.endNeuronID + " startID: " + newNeuronConn.startNeuronID);
         }
+        //System.out.print("copy ");
+        //checkForDuplicateIDs(true);
     }
 
     public NueralNet(List<Nueron> Neurons, List<NeuronConnection> NeuronsConnections){
@@ -41,7 +45,14 @@ public class NueralNet {
         for (Nueron n: this.NueronList){
             n.SetID(this.NextNeuronID);
             this.NextNeuronID++;
+            System.out.println(n.GetID() + " " + n);
         }
+        for(NeuronConnection n: this.NueronConnectionList){
+            n.UpdateIDs();
+            //System.out.println("OG endID: " + n.endNeuronID + " startID: " + n.startNeuronID);
+        }
+        //System.out.print("create ");
+        //checkForDuplicateIDs(true);
     }
 
     public NueralNet() {
@@ -51,17 +62,24 @@ public class NueralNet {
         newNeuron.SetID(this.NextNeuronID);
         this.NextNeuronID++;
         NueronList.add(newNeuron);
+        //System.out.print("add ");
+        //checkForDuplicateIDs(true);
     }
 
     public void TickUpdateAllNeurons(){
+        /////System.out.print("tick ");
+        //checkForDuplicateIDs(true);
         //System.out.println("next, connections: " + this.NueronConnectionList.size() + " neurons: " + this.NueronList.size());
-        for(NeuronConnection NC: NueronConnectionList){
-            for(Nueron N: this.NueronList){
-                N.UpdateExcitement(0.0);
+        //System.out.println("new creature");
+        for(Nueron N: this.NueronList){
+            for(NeuronConnection NC: NueronConnectionList){
+                
+                
                 if(NC.GetStartNeuron() == N){
+                    N.UpdateExcitement(0.0);
                     NC.SeeStartNeuronAndUpdateIsActive();
-
-
+                    //if (Game.round > 1000)
+                        //NC.print();
                     }
 
                 }
@@ -73,11 +91,11 @@ public class NueralNet {
         if (output) {
             for(Nueron N: this.NueronList) {
                 if (N.getClass() == OutputNeuron.class)
-                    System.out.print("O: " + N.getExcitement());
+                    System.out.print("O: " + N.getExcitement() + ", ID: " + N.NeuronInternalNetworkID);
                 else if (N.getClass() == InputNueron.class)
-                    System.out.print("I: " + N.getExcitement());
+                    System.out.print("I: " + N.getExcitement() + ", ID: " + N.NeuronInternalNetworkID);
                 else
-                    System.out.print("N: " + N.getExcitement());
+                    System.out.print("N: " + N.getExcitement() + ", ID: " + N.NeuronInternalNetworkID);
                 System.out.print("\n");
             }
         }
@@ -111,7 +129,10 @@ public class NueralNet {
     }
 
     public void evolveNewRandomNueron(){
-        NueronList.add(new Nueron());
+        Nueron n = new Nueron();
+        NueronList.add(n);
+        n.SetID(this.NextNeuronID);
+        this.NextNeuronID++;
     }
 
     public List<Nueron> getNeuronList(){
@@ -119,6 +140,7 @@ public class NueralNet {
     }
 
     public void addNewNeuralConnection(NeuronConnection nc){
+        nc.UpdateIDs();
         this.NueronConnectionList.add(nc);
     }
 
@@ -129,6 +151,31 @@ public class NueralNet {
         for(Nueron n: this.NueronList){
             n.SetBackToZeroExcitement();
         }
+    }
+
+    public boolean checkForDuplicateIDs(boolean print){
+
+        boolean duplicate = false;
+
+        for(Nueron n: this.NueronList){
+            for(Nueron m: this.NueronList){
+                if (n != m && n.GetID() == m.GetID()){
+                    duplicate = true;
+                    break;
+                }
+            }
+            if (duplicate){
+                break;
+            }
+        }
+
+        if (print && duplicate){
+            System.out.println("duplicate true");
+        }
+        else if (print && !duplicate){
+            System.out.println("duplicate false");
+        }
+        return duplicate;
     }
 
 }

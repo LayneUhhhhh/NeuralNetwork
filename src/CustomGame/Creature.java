@@ -14,7 +14,7 @@ public class Creature {
     private static final int MoveLeftValue = 2;
     private static final int MoveDownValue = 3;
     private static final int MoveUpValue = 4;
-
+    public static int allMoves;
     public int moves;
     public int x;
     public int y;
@@ -138,7 +138,7 @@ public class Creature {
 
     public boolean move(TileMap t, int moveValue){
 
-        System.out.print("Move!\n");
+        //System.out.print("Move!\n");
 
         boolean canMove = true;
 
@@ -167,7 +167,7 @@ public class Creature {
         //System.out.print("start tile: " + startTile.contents + " end tile: " + endTile.contents + " this: " + this + "\n");
         //System.out.print("endXY Move: " + this.x + "-" + this.y + "\n");
         if(canMove)
-            this.moves++;
+            this.allMoves++;
         return canMove;
     }
 

@@ -77,7 +77,8 @@ public interface NeuronTestingInterface {
         }
 
         Random rand = new Random();
-        NeuronConnection n = new NeuronConnection(new Nueron(possibleStartConnection.get(possibleStartConnection.size() - 1)), new Nueron(possibleEndConnection.get(rand.nextInt(possibleEndConnection.size() - 1))));
+        NeuronConnection n = new NeuronConnection(possibleStartConnection.get(possibleStartConnection.size() - 1), possibleEndConnection.get(rand.nextInt(possibleEndConnection.size() - 1)));
+        n.UpdateIDs();
         net.addNewNeuralConnection(n);
 
     }
@@ -120,7 +121,6 @@ public interface NeuronTestingInterface {
         for(NeuronConnection NC: tempConnList){
             if (NC.GetStartNeuron() == N || NC.GetEndNeuron() == N){
                 connList.remove(NC);
-                break;
             }
         }
 
@@ -150,11 +150,13 @@ public interface NeuronTestingInterface {
 
         for(int i = 0; i < amountOfStartConnections; i++){
             NeuronConnection nc = new NeuronConnection(N, possibleEndConnection.get(rand.nextInt(possibleEndConnection.size())));
+            nc.UpdateIDs();
             net.addNewNeuralConnection(nc);
         }
 
         for(int i = 0; i < amountOfEndConnections; i++){
             NeuronConnection nc = new NeuronConnection(possibleStartConnection.get(rand.nextInt(possibleStartConnection.size())), N);
+            nc.UpdateIDs();
             net.addNewNeuralConnection(nc);
         }
 

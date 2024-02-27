@@ -9,8 +9,8 @@ public class NeuronConnection {
 
     private Nueron startNeuron;
     private Nueron endNeuron;
-    private int startNeuronID;
-    private int endNeuronID;
+    public int startNeuronID;
+    public int endNeuronID;
     private double ActivityThreshold;
     private boolean Active;
     private double OutputSignalWhileActive; //between -1.0 and 1.0
@@ -38,7 +38,7 @@ public class NeuronConnection {
         randomValue = Math.round(randomValue * 1000.0) / 1000.0;
         this.OutputSignalWhileActive = randomValue + 0.7;
         System.out.print("connectionval: " + randomValue + "\n");
-        this.ActivityThreshold = rand.nextDouble();
+        this.ActivityThreshold = rand.nextDouble() - 0.5;
     }
 
     public NeuronConnection(NeuronConnection n){
@@ -102,12 +102,16 @@ public class NeuronConnection {
                 foundStart = true;
                 this.startNeuron = n;
             }
-            if (n.GetID() == this.startNeuronID){
+            if (n.GetID() == this.endNeuronID){
                 foundEnd = true;
                 this.endNeuron = n;
             }
             if(foundStart && foundEnd)
                 return;
+        }
+        System.out.println("bad; " + endNeuronID);
+        for (Nueron N: neuronList){
+            System.out.println(N.GetID());
         }
 
     }
@@ -117,6 +121,21 @@ public class NeuronConnection {
     }
     public Nueron GetEndNeuron(){
         return this.endNeuron;
+    }
+
+    public void print(){
+
+        String a;
+        if (this.Active == true)
+            a = "true";
+        else 
+            a = "false";
+        System.out.println("threshhold: " + this.ActivityThreshold + " output when active: " + this.OutputSignalWhileActive + " start nueron excitement: " + startNeuron.CurrentExcitementLevel + " start neuron ID: " + startNeuronID + " active: " + a + " end nueron excitement: " + endNeuron.CurrentExcitementLevel + " end neuron ID: " + endNeuronID + " endNuron: " + endNeuron);
+    }
+
+    public void UpdateIDs(){
+        this.endNeuronID = this.endNeuron.NeuronInternalNetworkID;
+        this.startNeuronID = this.startNeuron.NeuronInternalNetworkID;
     }
 
 }
