@@ -55,7 +55,7 @@ public class Game {
                 }
                 Creature.allMoves = 0;
 
-                if (round % 50000 == 0) {
+                if (round % 100000 == 0 || round == 200 || round == 100) {
                     SwingUtilities.invokeLater(() -> {
                         DrawingWindow gameWindow = new DrawingWindow(this.gameMap);
                         gameWindow.setVisible(true);
@@ -112,7 +112,7 @@ public class Game {
         
         Random rand = new Random();
 
-        if(round % 50 == 0){
+        if(round % 100 == 0){
             int I = 0;
             List<Creature> tempList = new ArrayList<>();
             List<Creature> tempList2 = new ArrayList<>();

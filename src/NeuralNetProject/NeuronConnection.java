@@ -36,9 +36,9 @@ public class NeuronConnection {
         double randomValue = rand.nextDouble() * 2000 - 1000;
         randomValue /= 1000;
         randomValue = Math.round(randomValue * 1000.0) / 1000.0;
-        this.OutputSignalWhileActive = randomValue + 0.7;
+        this.OutputSignalWhileActive = randomValue;
         System.out.print("connectionval: " + randomValue + "\n");
-        this.ActivityThreshold = rand.nextDouble() - 0.5;
+        this.ActivityThreshold = rand.nextDouble();
     }
 
     public NeuronConnection(NeuronConnection n){
@@ -65,7 +65,10 @@ public class NeuronConnection {
     public void SetActive(){
 
         if(this.Active == false){
-            endNeuron.UpdateExcitement(this.OutputSignalWhileActive);
+            if (this.OutputSignalWhileActive > 0)
+                endNeuron.UpdateExcitement(this.OutputSignalWhileActive + startNeuron.CurrentExcitementLevel);
+            else
+                endNeuron.UpdateExcitement(this.OutputSignalWhileActive - startNeuron.CurrentExcitementLevel);
             this.Active = true;
         }
 

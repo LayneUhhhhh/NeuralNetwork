@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface NeuronTestingInterface {
 
-    public static final int CONNECTIONS_PER_NEURON = 8;
+    public static final int CONNECTIONS_PER_NEURON = 2;
 
     public static NueralNet generateCreatureRandomStartingNet(int neuronRangeMin, int neuronRangeMax){
         List<Nueron> tempNeuronList = new ArrayList<>();
@@ -90,7 +90,13 @@ public interface NeuronTestingInterface {
     }
 
     static void RemoveConnections(NueralNet net, int amount){
+
         List<NeuronConnection> connectionList = net.GetConnectionList();
+
+        if(connectionList.size() < 2){
+            return;
+        }
+
         Random rand = new Random();
         for(int i = 0; i < amount; i++) {
             int deleteNum = rand.nextInt(connectionList.size());
@@ -127,10 +133,6 @@ public interface NeuronTestingInterface {
     }
 
     static void evolveNewNeuronWithConnections(NueralNet net, int amountOfStartConnections, int amountOfEndConnections){
-
-        if(net.getNeuronList().size() > 24){
-            return;
-        }
 
         Nueron N = evolveNewNeuron(net);
         Random rand = new Random();
