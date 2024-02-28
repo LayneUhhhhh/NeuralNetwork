@@ -1,10 +1,7 @@
 package CustomGame;
 
-import NeuralNetProject.InputNueron;
-import CustomGame.TileMap;
 import Graphics.DrawingWindow;
 
-import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,9 +9,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
-
-import CustomGame.Creature;
-import Graphics.DrawingWindow;
 
 import javax.swing.*;
 
@@ -125,7 +119,7 @@ public class Game {
                     c.moves = c.moves + 100;
                 }
             }
-            
+
             Collections.sort(this.gameCreatures, new Comparator<Creature>() {
             @Override
             public int compare(Creature obj1, Creature obj2) {
