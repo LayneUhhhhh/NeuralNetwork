@@ -1,4 +1,5 @@
 package Graphics;
+import CustomGame.Game;
 import CustomGame.Tile;
 import CustomGame.TileMap;
 
@@ -35,21 +36,20 @@ public class DrawingWindow extends JFrame {
         List<Tile> tList = T.getTilesOnMapList();
         int i = 0;
         for(Tile t: tList){
-            if (i % 100 == 0)
-                System.out.print("\n");
 
             if(t.contents != null) {
                 g.setColor(Color.RED);
-                System.out.print("O");
             }
             else{
                 g.setColor(Color.BLACK);
-                System.out.print("+");
             }
-            g.fillRect(t.x * 10, t.y * 10, 9, 9);
+            g.fillRect(t.x * 9, t.y * 9, 8, 8);
             //System.out.print(t.x + ":" + t.y + "\n");
         }
 
+        g.setColor(Color.BLUE);
+        String directionString = Game.rDirection ? "true" : "false";
+        g.drawChars(directionString.toCharArray(), 0, directionString.length(), 450, 450);
 
     }
 

@@ -1,6 +1,7 @@
 package NeuralNetProject;
 
 import CustomGame.Creature;
+import CustomGame.Game;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,6 +15,8 @@ public class NeuralNet {
     private List<Neuron> neuronList;
     private int nextNeuronID;
     private List<NeuronConnection> neuronConnectionList;
+
+    public static int temp = 0;
 
 
     // create new NeuralNet from existing NeuralNet
@@ -89,27 +92,27 @@ public class NeuralNet {
 
         //loop through each NeuronConnection and update them
         for(NeuronConnection NC: neuronConnectionList){
-            NC.GetStartNeuron().UpdateExcitement(0.0);
             NC.SeeStartNeuronAndUpdateIsActive();
-
         }
 
 
-        /*
-        boolean output = false;
-        if (output) {
+
+        boolean output = true;
+        if (output && temp != Game.round) {
+            temp = Game.round;
+            System.out.println("Neurons: " + this.neuronList.size() + " NeuronConnections: " + this.neuronConnectionList.size());
             for(Neuron N: this.neuronList) {
                 if (N.getClass() == OutputNeuron.class)
-                    System.out.print("O: " + N.getExcitement() + ", ID: " + N.NeuronInternalNetworkID);
+                    System.out.print("O: " + N.getExcitement() + ", ID: " + N.NeuronID);
                 else if (N.getClass() == InputNeuron.class)
-                    System.out.print("I: " + N.getExcitement() + ", ID: " + N.NeuronInternalNetworkID);
+                    System.out.print("I: " + N.getExcitement() + ", ID: " + N.NeuronID);
                 else
-                    System.out.print("N: " + N.getExcitement() + ", ID: " + N.NeuronInternalNetworkID);
+                    System.out.print("N: " + N.getExcitement() + ", ID: " + N.NeuronID);
                 System.out.print("\n");
             }
         }
 
-         */
+
     }
 
 
@@ -160,7 +163,7 @@ public class NeuralNet {
 
         //set Neuron's excitement to 0
         for(Neuron n: this.neuronList){
-            n.SetBackToZeroExcitement();
+            n.ResetExcitement();
         }
 
     }

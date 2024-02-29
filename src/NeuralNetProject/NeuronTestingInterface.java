@@ -10,13 +10,12 @@ public interface NeuronTestingInterface {
 
     public static NeuralNet generateCreatureRandomStartingNet(int neuronRangeMin, int neuronRangeMax){
         List<Neuron> tempNeuronList = new ArrayList<>();
-        tempNeuronList.add(new InputNeuron());
-        tempNeuronList.add(new InputNeuron());
-        tempNeuronList.add(new InputNeuron());
-        InputNeuron alwaysActive = new InputNeuron();
-        alwaysActive.ConstantValue = true;
-        alwaysActive.setNextExcitementLevel(1.0);
+        tempNeuronList.add(new InputNeuron(false, 0.0));
+        tempNeuronList.add(new InputNeuron(false, 0.0));
+        tempNeuronList.add(new InputNeuron(false, 0.0));
+        InputNeuron alwaysActive = new InputNeuron(true, 2.0);
         tempNeuronList.add(alwaysActive);
+        tempNeuronList.add(new InputNeuron(false, 0.0));
         tempNeuronList.add(new OutputNeuron());
         tempNeuronList.add(new OutputNeuron());
         tempNeuronList.add(new OutputNeuron());
@@ -78,7 +77,7 @@ public interface NeuronTestingInterface {
 
         Random rand = new Random();
         NeuronConnection n = new NeuronConnection(possibleStartConnection.get(possibleStartConnection.size() - 1), possibleEndConnection.get(rand.nextInt(possibleEndConnection.size() - 1)));
-        n.UpdateIDs();
+        n.SetNeuronIDs();
         net.addNewNeuralConnection(n);
 
     }
@@ -93,7 +92,7 @@ public interface NeuronTestingInterface {
 
         List<NeuronConnection> connectionList = net.GetConnectionList();
 
-        if(connectionList.size() < 2){
+        if(connectionList.size() < 15){
             return;
         }
 
@@ -152,13 +151,13 @@ public interface NeuronTestingInterface {
 
         for(int i = 0; i < amountOfStartConnections; i++){
             NeuronConnection nc = new NeuronConnection(N, possibleEndConnection.get(rand.nextInt(possibleEndConnection.size())));
-            nc.UpdateIDs();
+            nc.SetNeuronIDs();
             net.addNewNeuralConnection(nc);
         }
 
         for(int i = 0; i < amountOfEndConnections; i++){
             NeuronConnection nc = new NeuronConnection(possibleStartConnection.get(rand.nextInt(possibleStartConnection.size())), N);
-            nc.UpdateIDs();
+            nc.SetNeuronIDs();
             net.addNewNeuralConnection(nc);
         }
 

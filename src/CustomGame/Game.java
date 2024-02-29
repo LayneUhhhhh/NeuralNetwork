@@ -19,6 +19,7 @@ public class Game {
     private List<Creature> gameCreatures;
     private TileMap gameMap;
     public static boolean last = false;
+    public static boolean rDirection = true;
     public static int round = 0;
 
     public Game(){
@@ -34,6 +35,8 @@ public class Game {
         int k = 0;
 
             while(true){
+
+
                 this.round++;
                 //CheckIfGameCreaturesHaveTheSameXY("loop");
                 //System.out.print("contents: " + gameMap.GetAmountOfTilesWithContents() + "\n");
@@ -49,7 +52,7 @@ public class Game {
                 }
                 Creature.allMoves = 0;
 
-                if (round % 100000 == 0 || round == 200 || round == 100) {
+                if (round % 20000 == 0 || round % 20100 == 0) {
                     SwingUtilities.invokeLater(() -> {
                         DrawingWindow gameWindow = new DrawingWindow(this.gameMap);
                         gameWindow.setVisible(true);
@@ -107,6 +110,7 @@ public class Game {
         Random rand = new Random();
 
         if(round % 100 == 0){
+
             int I = 0;
             List<Creature> tempList = new ArrayList<>();
             List<Creature> tempList2 = new ArrayList<>();
@@ -127,6 +131,8 @@ public class Game {
             }
         });
 
+            if(!rDirection)
+                Collections.reverse(this.gameCreatures);
 
             for(Creature c: this.gameCreatures){
                 tempList.add(c);
@@ -171,6 +177,10 @@ public class Game {
                 }
                 i++;
             }
+            if(rDirection)
+                rDirection = false;
+            else
+                rDirection = true;
             //CheckIfGameCreaturesHaveTheSameXY("3");
             //System.out.print("Creatures3: " + gameCreatures.size() + "\n");
             //System.out.print("contents3: " + gameMap.GetAmountOfTilesWithContents() + "\n");

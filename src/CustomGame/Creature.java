@@ -111,13 +111,17 @@ public class Creature {
 
     public void Tick(TileMap t){
         List<InputNeuron> ineurons = Brain.getInputNeuronList();
-        ineurons.get(0).setNextExcitementLevel(this.x * 0.01);
-        ineurons.get(1).setNextExcitementLevel(this.y * 0.01);
-        ineurons.get(2).setNextExcitementLevel(0.0);
+        ineurons.get(0).UpdateExcitement(this.x * 0.01);
+        ineurons.get(1).UpdateExcitement(this.y * 0.01);
+        //System.out.println("CreatureExcitement: " + ineurons.get(1).getExcitement());
+        if (Game.rDirection)
+            ineurons.get(4).UpdateExcitement(2.0);
+        else
+            ineurons.get(4).UpdateExcitement(0.0);
         Brain.TickUpdateAllNeurons();
         List<OutputNeuron> oneurons = Brain.getOutputNeuronList();
 
-        int tempHighestDirection = 1;
+        int tempHighestDirection = MoveRightValue;
         double tempHighestOutputLevel = 0.0;
 
         for(int i = 0; i < 4; i++){
@@ -129,15 +133,18 @@ public class Creature {
 
         //System.out.print("highestOut: " + tempHighestOutputLevel + " direction: " + tempHighestDirection + "\n");
 
-        if(!(tempHighestOutputLevel < 1.0))
-            if (!this.move(t, tempHighestDirection));
-                ineurons.get(2).setNextExcitementLevel(1.0);
+        if(tempHighestOutputLevel >= 1.0 && !this.move(t, tempHighestDirection))
+            ineurons.get(2).UpdateExcitement(1.0);
+        else
+            ineurons.get(2).UpdateExcitement(0.0);
+
+        Brain.TickUpdateAllNeurons();
           
     }
 
     public boolean move(TileMap t, int moveValue){
 
-        //System.out.print("Move!\n");
+        System.out.print("Move!\n");
 
         boolean canMove = true;
 

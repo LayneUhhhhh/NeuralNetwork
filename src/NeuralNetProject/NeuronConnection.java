@@ -17,8 +17,8 @@ public class NeuronConnection {
     private double outputSignalWhileActive; //between -1.0 and 1.0
 
     //constants
-    private static final double MAX_RANDOM_OUTPUT_SIGNAL = 1.0;
-    private static final double MIN_RANDOM_OUTPUT_SIGNAL = -1.0;
+    private static final double MAX_RANDOM_OUTPUT_SIGNAL = 2.0;
+    private static final double MIN_RANDOM_OUTPUT_SIGNAL = -2.0;
     private static final double MAX_RANDOM_ACTIVITY_THRESHOLD = 1.0;
     private static final double MIN_RANDOM_ACTIVITY_THRESHOLD = 0.0;
 
@@ -48,16 +48,17 @@ public class NeuronConnection {
         //generate random output signal between MIN_RANDOM_OUTPUT_SIGNAL and MAX_RANDOM_OUTPUT_SIGNAL
         //multiply by 1000 to generate random value to at least 4 digits then divide by 1000 to get the original decimal place
         Random rand = new Random();
-        double multiplyRandomFunctionBy = (MAX_RANDOM_OUTPUT_SIGNAL - MIN_RANDOM_OUTPUT_SIGNAL) * 1000;
+        double multiplyRandomFunctionBy = (MAX_RANDOM_OUTPUT_SIGNAL + Math.abs(MIN_RANDOM_OUTPUT_SIGNAL)) * 1000;
         double subtractRandomFunctionBy = MIN_RANDOM_OUTPUT_SIGNAL * 1000;
-        double outputSignal = (rand.nextDouble() * multiplyRandomFunctionBy) - subtractRandomFunctionBy;
+        double outputSignal = rand.nextDouble(multiplyRandomFunctionBy) + subtractRandomFunctionBy;
+        //System.out.println("outputSignal: " + outputSignal + " subtractRandomFunctionBy: " + subtractRandomFunctionBy);
         outputSignal /= 1000;
         this.outputSignalWhileActive = outputSignal;
 
         //generate random activity threshold between MIN_RANDOM_ACTIVITY_THRESHOLD and MAX_RANDOM_ACTIVITY_THRESHOLD
-        multiplyRandomFunctionBy = (MAX_RANDOM_ACTIVITY_THRESHOLD - MIN_RANDOM_ACTIVITY_THRESHOLD) * 1000;
+        multiplyRandomFunctionBy = (MAX_RANDOM_ACTIVITY_THRESHOLD + Math.abs(MIN_RANDOM_ACTIVITY_THRESHOLD)) * 1000;
         subtractRandomFunctionBy = MIN_RANDOM_ACTIVITY_THRESHOLD * 1000;
-        double threshold = (rand.nextDouble() * multiplyRandomFunctionBy) - subtractRandomFunctionBy;
+        double threshold = rand.nextDouble(multiplyRandomFunctionBy) + subtractRandomFunctionBy;
         threshold /= 1000;
         this.activityThreshold = threshold;
 
@@ -78,6 +79,8 @@ public class NeuronConnection {
         if(startNeuron == null)
             return false;
 
+        //System.out.println("startNeuron: " + this.startNeuron.getExcitement() + " threshold: " + this.activityThreshold);
+
         if(this.startNeuron.getExcitement() >= this.activityThreshold)
             this.SetActive();
         else
@@ -92,10 +95,8 @@ public class NeuronConnection {
     public void SetActive(){
 
         if(!this.active){
-            if (this.outputSignalWhileActive > 0)
-                endNeuron.UpdateExcitement(this.outputSignalWhileActive + startNeuron.CurrentExcitementLevel);
-            else
-                endNeuron.UpdateExcitement(this.outputSignalWhileActive - startNeuron.CurrentExcitementLevel);
+            endNeuron.UpdateExcitement(this.outputSignalWhileActive);
+            //System.out.println("setActive: " + this.outputSignalWhileActive + " endNeuron: " + this.endNeuron.CurrentExcitementLevel);
             this.active = true;
         }
 
@@ -106,7 +107,7 @@ public class NeuronConnection {
     public void SetDeactive(){
 
         if(this.active){
-            endNeuron.UpdateExcitement(0 - this.outputSignalWhileActive);
+            endNeuron.UpdateExcitement(0.0 - this.outputSignalWhileActive);
             this.active = false;
         }
     }
@@ -152,8 +153,8 @@ public class NeuronConnection {
 
     //sets startNeuronID and endNeuronID using the ID values in the startNeuron and endNeuron Neuron objects
     public void SetNeuronIDs(){
-        this.endNeuronID = this.endNeuron.NeuronInternalNetworkID;
-        this.startNeuronID = this.startNeuron.NeuronInternalNetworkID;
+        this.endNeuronID = this.endNeuron.NeuronID;
+        this.startNeuronID = this.startNeuron.NeuronID;
     }
 
     //startNeuronGetter
