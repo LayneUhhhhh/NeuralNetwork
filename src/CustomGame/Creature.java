@@ -1,7 +1,6 @@
 package CustomGame;
 import NeuralNetProject.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -18,11 +17,11 @@ public class Creature {
     public int moves;
     public int x;
     public int y;
-    public NueralNet Brain;
+    public NeuralNet Brain;
     private int score;
 
 
-    public Creature(int x, int y, NueralNet brain) {
+    public Creature(int x, int y, NeuralNet brain) {
         this.x = x;
         this.y = y;
         Brain = brain;
@@ -57,14 +56,14 @@ public class Creature {
         this.x = randx;
         this.y = randy;
         this.moves = 0;
-        this.Brain = new NueralNet(c.Brain);
+        this.Brain = new NeuralNet(c.Brain);
         //System.out.print("endXY Con: " + this.x + "-" + this.y + "\n");
 
     }
 
     public Creature evolveNewCreatureWithNewConnections(TileMap t){
         
-        NueralNet tempBrain = new NueralNet(Brain);
+        NeuralNet tempBrain = new NeuralNet(Brain);
         Random rand = new Random();
         int tempInt = rand.nextInt(2) + 1;
         for(int i = 0; i < tempInt; i++){
@@ -77,7 +76,7 @@ public class Creature {
 
     public Creature evolveNewCreatureWithRemovedConnection(TileMap t){
 
-        NueralNet tempBrain = new NueralNet(Brain);
+        NeuralNet tempBrain = new NeuralNet(Brain);
         Random rand = new Random();
         int tempInt = rand.nextInt(2) + 1;
         for(int i = 0; i < tempInt; i++){
@@ -89,7 +88,7 @@ public class Creature {
     }
     public Creature evolveNewCreatureWithRemovedNeuron(TileMap t){
 
-        NueralNet tempBrain = new NueralNet(Brain);
+        NeuralNet tempBrain = new NeuralNet(Brain);
         Random rand = new Random();
         int tempInt = rand.nextInt(2) + 1;
         for(int i = 0; i < tempInt; i++){
@@ -103,7 +102,7 @@ public class Creature {
     public Creature evolveNewCreatureWithNewNeuron(TileMap t){
 
         Random rand = new Random();
-        NueralNet tempBrain = new NueralNet(Brain);
+        NeuralNet tempBrain = new NeuralNet(Brain);
         NeuronTestingInterface.evolveNewNeuronWithConnections(tempBrain, rand.nextInt(2), rand.nextInt(2));
         Creature c = new Creature(this.x, this.y, tempBrain);
         return new Creature(c, t);
@@ -111,14 +110,18 @@ public class Creature {
     }
 
     public void Tick(TileMap t){
-        List<InputNueron> ineurons = Brain.getInputNeuronList();
-        ineurons.get(0).setNextExcitementLevel(this.x * 0.01);
-        ineurons.get(1).setNextExcitementLevel(this.y * 0.01);
-        ineurons.get(2).setNextExcitementLevel(0.0);
+        List<InputNeuron> ineurons = Brain.getInputNeuronList();
+        ineurons.get(0).UpdateExcitement(this.x * 0.01);
+        ineurons.get(1).UpdateExcitement(this.y * 0.01);
+        //System.out.println("CreatureExcitement: " + ineurons.get(1).getExcitement());
+        if (Game.rDirection)
+            ineurons.get(4).UpdateExcitement(2.0);
+        else
+            ineurons.get(4).UpdateExcitement(0.0);
         Brain.TickUpdateAllNeurons();
         List<OutputNeuron> oneurons = Brain.getOutputNeuronList();
 
-        int tempHighestDirection = 1;
+        int tempHighestDirection = MoveRightValue;
         double tempHighestOutputLevel = 0.0;
 
         for(int i = 0; i < 4; i++){
@@ -130,15 +133,18 @@ public class Creature {
 
         //System.out.print("highestOut: " + tempHighestOutputLevel + " direction: " + tempHighestDirection + "\n");
 
-        if(!(tempHighestOutputLevel < Nueron.ExcitementThreshold))
-            if (!this.move(t, tempHighestDirection));
-                ineurons.get(2).setNextExcitementLevel(1.0);
+        if(tempHighestOutputLevel >= 1.0 && !this.move(t, tempHighestDirection))
+            ineurons.get(2).UpdateExcitement(1.0);
+        else
+            ineurons.get(2).UpdateExcitement(0.0);
+
+        Brain.TickUpdateAllNeurons();
           
     }
 
     public boolean move(TileMap t, int moveValue){
 
-        //System.out.print("Move!\n");
+        System.out.print("Move!\n");
 
         boolean canMove = true;
 

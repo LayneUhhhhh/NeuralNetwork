@@ -1,10 +1,5 @@
-import CustomGame.Creature;
 import CustomGame.Game;
-import CustomGame.TileMap;
-import Graphics.DrawingWindow;
-import NeuralNetProject.NueralNet;
 
-import javax.swing.*;
 import java.io.IOException;
 
 public class Main {

@@ -1,35 +1,30 @@
 package NeuralNetProject;
 
-import NeuralNetProject.NeuronConnection;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.Integer.valueOf;
 
-public class Nueron {
-
-    public static final double ExcitementThreshold = 1.0;
+public class Neuron {
+    
     protected double CurrentExcitementLevel;
-    protected int NeuronInternalNetworkID;
-
+    protected int NeuronID;
 
     protected List<NeuronConnection> OutputConnections;
 
 
-    public Nueron(Nueron n){
+    public Neuron(Neuron n){
         this.CurrentExcitementLevel = 0.0;
-        this.NeuronInternalNetworkID = valueOf(n.NeuronInternalNetworkID);
+        this.NeuronID = valueOf(n.NeuronID);
     }
 
-    public Nueron(){
+    public Neuron(){
         this.CurrentExcitementLevel = 0.0;
-        this.NeuronInternalNetworkID = -1;
+        this.NeuronID = -1;
     }
 
-    public Nueron(int id){
+    public Neuron(int id){
         this.CurrentExcitementLevel = 0.0;
-        this.NeuronInternalNetworkID = id;
+        this.NeuronID = id;
     }
 
     public double getExcitement(){
@@ -37,18 +32,18 @@ public class Nueron {
     }
 
     public int GetID(){
-        return this.NeuronInternalNetworkID;
+        return this.NeuronID;
     }
 
     public void SetID(int id){
-        this.NeuronInternalNetworkID = id;
+        this.NeuronID = id;
     }
 
     public void UpdateExcitement(double amount){
         this.CurrentExcitementLevel += amount;
     }
 
-    public void SetBackToZeroExcitement(){
+    public void ResetExcitement(){
         this.CurrentExcitementLevel = 0.0;
     }
 }
