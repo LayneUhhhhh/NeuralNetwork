@@ -52,7 +52,7 @@ public class Game {
                 }
                 Creature.allMoves = 0;
 
-                if (round % 20000 == 0 || round % 20100 == 0) {
+                if (round % 10000000 == 0) {
                     SwingUtilities.invokeLater(() -> {
                         DrawingWindow gameWindow = new DrawingWindow(this.gameMap);
                         gameWindow.setVisible(true);
@@ -114,7 +114,10 @@ public class Game {
             int I = 0;
             List<Creature> tempList = new ArrayList<>();
             List<Creature> tempList2 = new ArrayList<>();
-                
+            if (rDirection)
+                System.out.println("Right!");
+            else
+                System.out.println("Left!");
             for(Creature c: this.gameCreatures){
                 System.out.println("X: " + c.x);
                 if (c.moves < 1)
@@ -143,7 +146,7 @@ public class Game {
                     Creature C = tempList.get(i);
                     gameCreatures.remove(C);
                     C.RemoveFromMap(this.gameMap);
-                }
+            }
             //CheckIfGameCreaturesHaveTheSameXY("1");
             int tempSize = valueOf(gameCreatures.size());
 

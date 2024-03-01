@@ -113,6 +113,7 @@ public class Creature {
         List<InputNeuron> ineurons = Brain.getInputNeuronList();
         ineurons.get(0).UpdateExcitement(this.x * 0.01);
         ineurons.get(1).UpdateExcitement(this.y * 0.01);
+        ineurons.get(3).override();
         //System.out.println("CreatureExcitement: " + ineurons.get(1).getExcitement());
         if (Game.rDirection)
             ineurons.get(4).UpdateExcitement(2.0);
@@ -144,7 +145,7 @@ public class Creature {
 
     public boolean move(TileMap t, int moveValue){
 
-        System.out.print("Move!\n");
+        //System.out.print("Move!\n");
 
         boolean canMove = true;
 

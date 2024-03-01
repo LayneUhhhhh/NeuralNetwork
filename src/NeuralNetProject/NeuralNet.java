@@ -97,7 +97,7 @@ public class NeuralNet {
 
 
 
-        boolean output = true;
+        boolean output = false;
         if (output && temp != Game.round) {
             temp = Game.round;
             System.out.println("Neurons: " + this.neuronList.size() + " NeuronConnections: " + this.neuronConnectionList.size());

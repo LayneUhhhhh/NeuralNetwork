@@ -9,8 +9,8 @@ public class InputNeuron extends Neuron {
         super();
         this.CurrentExcitementLevel = startingOutput;
         this.constantOutputSignal = constantOutput;
-        if(constantOutput)
-            this.temp = startingOutput;
+        this.temp = startingOutput;
+        //System.out.println("start: " + this.temp);
     }
 
     public InputNeuron(boolean constantOutput, double startingOutput, int id){
@@ -25,9 +25,10 @@ public class InputNeuron extends Neuron {
         super(n);
         InputNeuron temp = (InputNeuron) n;
         if(temp.constantOutputSignal){
-            this.CurrentExcitementLevel = temp.temp;
+            this.CurrentExcitementLevel = 2.0;
             this.constantOutputSignal = true;
-            this.temp = temp.temp;
+            this.temp = 2.0;
+            //System.out.println("everUsed: " + temp.temp);
         }
         else
             this.CurrentExcitementLevel = 0.0;
@@ -38,12 +39,20 @@ public class InputNeuron extends Neuron {
     public void UpdateExcitement(double amount){
         if(!constantOutputSignal)
             CurrentExcitementLevel = amount;
+        else 
+            CurrentExcitementLevel = 2.0;
     }
 
     @Override
     public void ResetExcitement(){
         if(!constantOutputSignal)
             CurrentExcitementLevel = 0.0;
+        else 
+            CurrentExcitementLevel = 2.0;
+    }
+
+    public void override(){
+        this.CurrentExcitementLevel = 2.0;
     }
 
 }

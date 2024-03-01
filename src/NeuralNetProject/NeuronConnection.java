@@ -50,7 +50,7 @@ public class NeuronConnection {
         Random rand = new Random();
         double multiplyRandomFunctionBy = (MAX_RANDOM_OUTPUT_SIGNAL + Math.abs(MIN_RANDOM_OUTPUT_SIGNAL)) * 1000;
         double subtractRandomFunctionBy = MIN_RANDOM_OUTPUT_SIGNAL * 1000;
-        double outputSignal = rand.nextDouble(multiplyRandomFunctionBy) + subtractRandomFunctionBy;
+        double outputSignal = (rand.nextDouble() * multiplyRandomFunctionBy) + subtractRandomFunctionBy;
         //System.out.println("outputSignal: " + outputSignal + " subtractRandomFunctionBy: " + subtractRandomFunctionBy);
         outputSignal /= 1000;
         this.outputSignalWhileActive = outputSignal;
@@ -58,7 +58,7 @@ public class NeuronConnection {
         //generate random activity threshold between MIN_RANDOM_ACTIVITY_THRESHOLD and MAX_RANDOM_ACTIVITY_THRESHOLD
         multiplyRandomFunctionBy = (MAX_RANDOM_ACTIVITY_THRESHOLD + Math.abs(MIN_RANDOM_ACTIVITY_THRESHOLD)) * 1000;
         subtractRandomFunctionBy = MIN_RANDOM_ACTIVITY_THRESHOLD * 1000;
-        double threshold = rand.nextDouble(multiplyRandomFunctionBy) + subtractRandomFunctionBy;
+        double threshold = (rand.nextDouble() * multiplyRandomFunctionBy) + subtractRandomFunctionBy;
         threshold /= 1000;
         this.activityThreshold = threshold;
 
